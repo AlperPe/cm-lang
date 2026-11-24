@@ -1,0 +1,7 @@
+alt = 3, ust = 20, x = 12
+id("m") = 2, id("a") = 7
+
+if ust > x >= alt ->
+    loop(frange.(id("m")-id("a")))
+    print (x * id("a"))
+end. id("main")

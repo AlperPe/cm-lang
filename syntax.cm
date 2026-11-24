@@ -1,0 +1,37 @@
+//x.cm - a CM language with a focus on mathematics and logic 
+call <library>
+call ...
+x = 10, y = 20, target = id("") 
+                                                              // target tanımsızsa o zaman target hatası verir ya da klasör açıp orayı hedefler.
+
+if x == 1 ->                                                  // x varsa, dogruysa, == denkse,
+   save(target)                      
+end  id("main") 
+
+if x == 4 -> and y > 50 -> 
+return block("main")
+     print (y * id(""))                                       // y ile id çarp yaz. hedefe id("k") olarak tut/kaydet. 
+     save(target) id("k")
+end id(random) // direkt random harf ya da sayı random koyar.
+
+if 10 > x >= 5  -> 
+
+loop(id("m"), id("a")) or loop(frange.(id("m")-id("a")))      // 1. 2 si arasında dön, 2. bu aralıkta id m den başla a ya kadar git.
+
+if id("m") or id("a") == 0 ->                                 // yoksa id("z") block'unu bitir ve aşağıya geç. 
+end id("z")
+
+if x >= 10 -> 
+make.(x == y) and print(f^(x * y))                             // x 10'a eşit veya büyükse x'i y ye zorla ve çarpımlarını yaz (y^2 formantında).
+
+end. id(random)
+
+// href "link" show("görünen isim") id("etiket") /href 
+// örnek: id(words)[sırayla verir] or id(number)[yine sırayla] 
+//id(random_number) id(random_words) 0 ile 1000 arası veya harflerde harf biterse SE gibi vermeye başlar. SE.. devam. 0 1000 arası biterse artar.
+
+
+
+
+// noktalı end kodun sonunu getirir, noktasız o ifadenin sonunu getirir.
+    

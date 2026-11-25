@@ -23,7 +23,116 @@ end id("z")
 
 if x >= 10 -> 
 make.(x == y) and print(f^(x * y))                             // x 10'a eşit veya büyükse x'i y ye zorla ve çarpımlarını yaz (y^2 formantında).
+else id("f").(x)
+end id("dxm")
 
+if id("dxm") <-> 1 == 0 -> 
+     print(y * id("")) 
+
+// rotate.(targetorother) hedefi çevirir. her etki yazılırken 'yapılacak.(kimeyapılacak)' olarak yazılır
+
+// RAM'de başlangıç ve bitiş adreslerini etiketle
+id("ram_bas") = 0x1000
+id("ram_son") = 0x10FF
+
+// Bu bellek aralığındaki tüm hücreleri 3-2-3 kontrol baytı kuralıyla sıfırla veya işle
+loop(frange.(id("ram_bas")-id("ram_son"))) ->
+    kontrol_bayti.(id(""))          // id("") o anki bellek adresini temsil eder
+end id("bellek_temizle")
+// Doğrudan sistem bellek bölgelerine kaydetme (tırnaksız sistem anahtar kelimesi)
+save(target) id(op1)
+save(log) id(right)
+
+// İki sistem bölgesi arasında aralık tarama
+loop(frange.(id(op1)-id(middle))) ->
+    kontrol_bayti.(id())
+end id("tarama") --show
+
+// 1. Senaryo: y'yi bir matematiksel kural/fonksiyon olarak kur
+func y(t) = t^2 + 3
+x = 4
+y.(x)              // x'i alır, y kuralından geçirir (4^2 + 3 = 19) ve x'e yazar
+
+// 2. Senaryo: y'yi bir skaler katsayı olarak tanımla
+y = 10, target = 5
+y.(target)         // target üzerine y etkisini uygular (50)
+
+// 3. Senaryo: Sistemin kendi yerleşik etkileri
+rotate.(target)    // target'ı çevirir (-50)
+end id("main")
+// kilit_senkron.cm
+ana_vana = 1, yedek_vana = 0, guvenlik_kilidi = 1
+
+// İki vana ANCAK VE ANCAK aynı durumdaysa (ikisi de 1 veya ikisi de 0) akışa izin ver
+if ana_vana == 1 <-> yedek_vana == 1 ->
+    print (guvenlik_kilidi)
+    save(target) id("onay")
+else
+    // Durumlar uyumsuzsa yedek vanayı ana vanaya eşitlemeye zorla
+    make.(yedek_vana == ana_vana)
+    rotate.(guvenlik_kilidi)
+end id("sistem")
+// parite_analiz.cm
+id("bas") = 1, id("son") = 12
+x = 6, y = 14
+
+// x ve y ANCAK VE ANCAK ikisi de çiftse (veya ikisi de tekse) aralıkta dön
+if x % 2 == 0 <-> y % 2 == 0 ->
+    loop(frange.(id("bas")-id("son")))
+    print (x * y)
+end. id("matematik")
+// tutarlilik.cm
+aktif = 0, sicaklik = 45
+
+// Sistemin aktif olması ANCAK VE ANCAK sıcaklığın [20, 60) aralığında olmasına denktir
+if aktif == 1 <-> 60 > sicaklik >= 20 ->
+    print (sicaklik)
+else
+    // Tutarsızlık varsa (sıcaklık normal ama sistem kapalıysa) durumu onar
+    make.(aktif == 1)
+    save(target) id("onarildi")
+end. id("kontrol")
+
+// op1 bölgesinin kendi içindeki alt dilimlere doğrudan veri yerleştirme
+save(giris) id(op1.left)
+save(katsayi) id(op1.op1)
+
+// op1.left ile op1.op2 arasındaki alt dilimleri tarayıp sonucu op1.right'a mühürleme
+loop(frange.(id(op1.left)-id(op1.op2))) ->
+    kural.(id())
+end id("alt_islem") --show
+
+save(sonuc) id(op1.right)
+
+// op1 bölgesinin kendi içindeki alt dilimlere doğrudan veri yerleştirme
+save(giris) id(op1.left)
+save(katsayi) id(op1.op1)
+
+// op1.left ile op1.op2 arasındaki alt dilimleri tarayıp sonucu op1.right'a mühürleme
+loop(frange.(id(op1.left)-id(op1.op2))) ->
+    kural.(id())
+end id("alt_islem") --show
+
+save(sonuc) id(op1.right)
+
+// left ve op1 duvarını kaldırıp tek geniş kılavuz alanı aç
+guide.(id(left >-< op1)) = [ ... uzun kılavuz ... ]
+
+// middle, op2 ve right kendi sınırlarında mühürlü kalsın
+guide.(id(middle)) = [V -> right]
+guide.(id(right))  = [stream]
+
+// Her bölgeye kendi kılavuz görevini ata (kalan boşluklar otomatik 000 mühürlenir)
+guide.(id(left))   = [2, 3, 3]       // Giriş bit kesme kılavuzu
+guide.(id(op1))    = [make, rotate]  // 1. işlem kılavuzu
+guide.(id(op2))    = [check]         // 2. işlem kılavuzu
+guide.(id(middle)) = [V -> right]    // İkisi de hazırsa (V) right'a aktar
+guide.(id(right))  = [stream]        // Ekrana bas ve bitir
+
+run.(id(middle)) --show
+[  Mavi (3 bit)  ]  |  [ Kırmızı (2 bit) ]  |  [  Sarı (3 bit)  ]
+  left / op1 yönü          MIDDLE KAVŞAĞI         op2 / right yönü
+                         ( ^ | L | J | V )
 end. id(random)
 
 // href "link" show("görünen isim") id("etiket") /href 

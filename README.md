@@ -1,3 +1,5 @@
+**CM Language KURUMLARDAN bağımsız olarak Alper Pektaş tarafından kurgulanmış ve yazılmıştır.**
+**CM Language was conceived and written by Alper Pektaş independently of any institutions.**
 1. Library Imports & Variable DeclarationMultiple variables can be assigned in a single line without type keywords. 
 If target is left empty (id("")) or undefined, the runtime automatically creates and targets a fallback directory.
 
